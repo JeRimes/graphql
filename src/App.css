@@ -69,3 +69,46 @@
 .green {
   background-color: #02e7a9;
 }
+
+.content{
+  padding: 100px 150px;
+}
+
+.LanguageBlock{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.LanguageBlock canvas {
+  max-width: 400px;
+  max-height: 400px;
+  padding: 0!important;
+}
+.content-language{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 50vw;
+  
+}
+@media screen and (max-width: 1300px) {
+  .content-language{
+    width: 100vw;
+    justify-content: center;
+  }
+}
+
+.card-language{
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+.card-language > div{
+  padding: 0px 15px;
+}
+.bg-soft-grey{
+  background-color: #f0f4f0;
+}
+.bg-grey{
+  background-color: #e2eae5;
+}
