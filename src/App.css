@@ -112,3 +112,42 @@
 .bg-grey{
   background-color: #e2eae5;
 }
+.repo-header, .repo-language, .repo-language-card, .repo-info, .repo-firstLine,.repo-language-container{
+  display: flex;
+}
+.repo-content{
+  margin:10px 0;
+}
+.repo-language-container{
+  width: fit-content;
+}
+.repo-language-card{
+  padding:0 10px;
+  margin-right:10px;
+  align-items: center;
+  width:150px;  
+  justify-content: space-between;
+}
+.repo-info, .repo-language{
+  flex-direction: column;
+}
+.repo-firstLine,.repo-header{
+  gap:10px;
+}
+.repo-firstLine>*,.repo-header>*{
+  padding:0 10px;
+}
+
+.repo-firstLine > :first-child, .repo-header:first-child{
+  width: 20px;
+}
+.repo-firstLine > :nth-child(2), .repo-header> :nth-child(2){
+  width: 300px;
+}
+
+.circle{
+  width: 25px;
+  height: 25px;
+  background-color: red;
+  border-radius: 50%;
+}

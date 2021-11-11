@@ -4,7 +4,7 @@ import {
   gql
 } from "@apollo/client";
 import DivTotalActivity from '../components/TotalActivityGit'
-import { Overview,Language } from '../components/Overview';
+import { Overview, Language, Repository} from '../components/Overview';
 const QUERY = gql`
 query{
     user(login: "JeRimes") {
@@ -29,6 +29,7 @@ function Home() {
       <DivTotalActivity />
       <Overview></Overview>
       <Language></Language>
+      <Repository></Repository>
     </div>
 
   )

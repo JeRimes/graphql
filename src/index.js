@@ -13,10 +13,10 @@ import {
 const httpLink = createHttpLink({
   uri: "https://api.github.com/graphql",
   headers: {
-    authorization: `Bearer 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`
+    authorization: `Bearer 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`
   }
 });
-
+//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
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: httpLink,

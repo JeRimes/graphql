@@ -12,7 +12,10 @@ const QUERY = gql`{
   viewer {
     login
     repositories(first: 10) {
+
       totalCount
+
+      #get language used
       nodes {
         languages(first: 10) {
           nodes {
@@ -20,6 +23,30 @@ const QUERY = gql`{
             color
           }
         }
+
+      #repo name /with owner
+      name
+      nameWithOwner
+      description
+
+      #get number in team
+      collaborators {
+        totalCount
+      }
+
+      #get number of commit per repo
+      defaultBranchRef {
+        target {
+          ... on Commit {
+            id
+            history(first: 0) {
+              totalCount
+            }
+          }
+        }
+      }  
+
+
       }
     }
   }
@@ -52,13 +79,95 @@ var infoGraph = GetInfoGraph(unique);
     </div>
   )
 }
+export function Repository() {
+    //Query to get language used in repo
+    const { loading, error, data } = useQuery(QUERY);
+    if (loading) return <p>loading</p>;
+    if (error) return <p>error</p>;
+    const GetNodes = data.viewer.repositories.nodes;
+
+    var ListRepo =[];
+    GetNodes.map((item, i) => {   
+      var ListAttributes =[];
+      console.log(item);
+      const GetLanguage = item.languages.nodes;
+      if(GetLanguage.length === 0){
+          var myobj ={name : "Unatributes", color : "grey", counter: 0, itemWithOwner: item.nameWithOwner};
+          ListAttributes.push(myobj);
+      }
+      //Add all language and other parameter
+      GetLanguage.map((x, i) => {  
+          var myobj = {name : x.name, color : x.color, counter: 0, itemWithOwner: item.nameWithOwner};
+          ListAttributes.push(myobj);
+      });
+      ListRepo.push({ListAttr:ListAttributes, nameRepo:item.name, repoDesc:item.description, itemWithOwner:item.nameWithOwner, team : item.collaborators.totalCount, nbCommit: item.defaultBranchRef.target.history.totalCount});
+    }
+  );
+  console.log(ListRepo);
+  return (
+    <div>
+    <h1>Repository</h1>
+    <div className="repo-header bg-grey">
+      <h3>#</h3>
+      <h3>Repository</h3>
+      <h3>Commits</h3>
+      <h3>Team</h3>
+      <h3>Language</h3>
+    </div>
+    <div>
+    {
+              ListRepo.map((repo, i) => (
+              <div className="repo-content">
+                      <div className="bg-soft-grey repo-language">
+                        <div className="repo-firstLine">
+                            <p>{i}</p>
+                            <div className="repo-info">
+                              {/* <img src="">github</img> */}
+                              <p>{repo.nameRepo}</p>
+                              <p>{repo.repoDesc}</p>
+                              {/* <img>github</img> */}
+                              <p>{repo.itemWithOwner}</p>
+
+                              <div className="repo-language-container">
+                                {
+                                  repo.ListAttr.map((language, i) => (
+                                    <div className="repo-language-card bg-grey">
+                                        <p>{language.name}</p>
+                                        <div className="circle"></div>
+                                    </div>
+                                          
+                                  ))
+                                  }
+                                  </div>
+                                  <div>
+                                    {/* <img src="">logo user</img> */}
+                                    <p>{data.viewer.login}</p>
+                                  </div>
+                            </div>
+                            <p>{repo.nbCommit}</p>
+                            <p>{repo.team}</p>
+                            <p>c#</p>
+                        </div>
+                    
+              
+                  
+                      </div>
+              </div>
+               ))
+              }
+
+    </div>
+    </div>
+    
+    )
+
+}
 
 export function Language() {
   //Query to get language used in repo
   const { loading, error, data } = useQuery(QUERY);
   if (loading) return <p>loading</p>;
   if (error) return <p>error</p>;
-  console.log(data);
     //path to language
     const GetNodes = data.viewer.repositories.nodes;
 
@@ -152,7 +261,7 @@ function getListAllAttributesLanguage(GetNodes){
   var ListAttributes =[];
   GetNodes.map((item, i) => {   
     const GetLanguage = item.languages.nodes;
-    if(GetLanguage.length == 0){
+    if(GetLanguage.length === 0){
         var myobj ={name : "Unatributes", color : "grey", counter: 0};
         ListAttributes.push(myobj);
     }
