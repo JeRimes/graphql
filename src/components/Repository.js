@@ -3,54 +3,8 @@ import {
     useQuery,
     gql
 } from "@apollo/client";
-import { Bar, Doughnut  } from 'react-chartjs-2';
-
-/*
-extraire les languages
-*/
-const QUERY = gql`{
-  user(login: "JeRimes") {
-    login
-    repositories(first: 10) {
-
-      totalCount
-
-      #get language used
-      nodes {
-        languages(first: 10) {
-          nodes {
-            name
-            color
-          }
-        }
-
-      #repo name /with owner
-      name
-      nameWithOwner
-      description
-
-      #get number in team
-      collaborators {
-        totalCount
-      }
-
-      #get number of commit per repo
-      defaultBranchRef {
-        target {
-          ... on Commit {
-            id
-            history(first: 0) {
-              totalCount
-            }
-          }
-        }
-      }  
-
-
-      }
-    }
-  }
-}`;
+import { Doughnut} from 'react-chartjs-2';
+import {QUERY} from '../QueryGithub.js';
 
 
 export function Repository() {
@@ -81,10 +35,10 @@ export function Repository() {
     <p>{ListRepo.length} repos</p>
     <div className="repo-header bg-grey">
       <h3>#</h3>
-      <h3>Repository</h3>
-      <h3>Commits</h3>
-      <h3>Team</h3>
-      <h3>Language</h3>
+      <h3 className="col-2">Repository</h3>
+      <h3 className="col-3">Commits</h3>
+      <h3 className="col-4">Team</h3>
+      <h3 className="col-5">Language</h3>
     </div>
     <div>
     {
@@ -93,7 +47,7 @@ export function Repository() {
                       <div className="bg-soft-grey repo-language">
                         <div className="repo-firstLine">
                             <p>{i}</p>
-                            <div className="repo-info">
+                            <div className="repo-info col-2">
                           
                               <p>{repo.nameRepo}</p>
                               <p>{repo.repoDesc}</p>
@@ -115,10 +69,10 @@ export function Repository() {
                               
                                     <p>{data.user.login}</p>
                                   </div>
-                            </div>
-                            <p>{repo.nbCommit}</p>
-                            <p>{repo.team}</p>
-                            <p>{repo.ListAttr.find(x=>x!==undefined).name}</p>
+                              </div>
+                              <p className="col-3">{repo.nbCommit}</p>
+                              <p className="col-4">{repo.team}</p>
+                              <p className="col-5">{repo.ListAttr.find(x=>x!==undefined).name}</p>
                         </div>
                           
                       </div>
@@ -127,6 +81,8 @@ export function Repository() {
               }
 
     </div>
+   
+
     </div>
     
     )
@@ -134,7 +90,6 @@ export function Repository() {
 }
 
 export function Language() {
-  console.log("test");
   //Query to get language used in repo
   const { loading, error, data } = useQuery(QUERY);
   if (loading) return <p>loading</p>;
@@ -147,7 +102,7 @@ export function Language() {
 
     //distinct and unique name with all altributes : color and counter
     const unique = [...new Map(ListAttributes.map(item => [item["name"], item])).values()]
-  console.log(unique);
+
     //sort list
     unique.sort((a, b) => (a.counter > b.counter) ? 1 : -1);
 
@@ -169,7 +124,7 @@ var infoGraph = GetInfoGraphDoughnut(unique);
                       <p>2</p>
                       </div>*/}
                       <div className="bg-soft-grey">
-                        <p>Appear in {language.counter} repo</p>
+                        <p>Used in {language.counter} repo</p>
                       </div> 
               </div>
                ))

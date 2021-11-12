@@ -4,46 +4,10 @@ import {
     gql
 } from "@apollo/client";
 import {allLanguageProg} from '../allProgramingLanguage.js';
-
 import { Bar } from 'react-chartjs-2';
-
+import {QUERY} from '../QueryGithub.js';
 export var LOC = 0;
-const QUERY = gql`
-{
 
-    user(login: "JeRimes") {
-    login
-    repositories(first: 100) {
-      nodes {
-        object(expression: "HEAD:") {
-        ... on Tree {
-          entries {
-            name
-            object {
-              ... on Blob {
-                byteSize
-              }
-              ... on Tree {
-                entries {
-                  name
-                  object {
-                    ... on Blob {
-                      byteSize
-                    }
-                  }
-                  extension
-                }
-              }
-            }
-          }
-        }
-      }
-      }
-    }
-  
-}
-}
-`
 export function DivLOCperLanguage() {
 
     const { loading, error, data } = useQuery(QUERY);
@@ -85,7 +49,6 @@ export function DivLOCperLanguage() {
     resp.map(element=>{
       LOC+= element.biteSize;
     });
-    console.log(LOC);
     var infoGraph = GetInfoGraph(resp.sort((a, b) => (a.biteSize > b.biteSize) ? 1 : -1));
     return(
         <div>

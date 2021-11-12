@@ -142,11 +142,17 @@
   padding:0 10px;
 }
 
-.repo-firstLine > :first-child, .repo-header:first-child{
+.repo-firstLine > :first-child, .repo-header h3:first-child{
   width: 20px;
+  text-align: center;
 }
-.repo-firstLine > :nth-child(2), .repo-header> :nth-child(2){
+.col-2{
   width: 300px;
+}
+
+.col-3,.col-4,.col-5{
+  width: 100px;
+  text-align: center;
 }
 
 .circle{

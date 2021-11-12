@@ -4,43 +4,7 @@ import {
     gql
 } from "@apollo/client";
 import {LOC} from '../components/LOCperLanguage'
-
-const QUERY = gql`
-query{
-    user(login: "JeRimes") {
-    login
-    avatarUrl
-    bio
-    name
-    following {
-      totalCount
-    }
-    followers {
-        totalCount
-    }
-    commitComments {
-      totalCount
-    }
-    repositories(first: 10) {
-        nodes {
-          defaultBranchRef {
-            target {
-              ... on Commit {
-                id
-                history(first: 10) {
-                  totalCount
-                }
-              }
-            }
-          }
-        }
-      }
-
-  }
-}
-`;
-
-
+import {QUERY} from '../QueryGithub.js';
 
 export default function DivTotalActivity() {
 

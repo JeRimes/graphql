@@ -4,21 +4,9 @@ import {
   gql
 } from "@apollo/client";
 import DivTotalActivity from '../components/TotalActivityGit'
-import { Language, Repository} from '../components/Overview';
+import {Language, Repository} from '../components/Repository';
 import {DivLOCperLanguage} from '../components/LOCperLanguage';
-
-const QUERY = gql`
-query{
-    user(login: "JeRimes") {
-    login
-    avatarUrl
-    company
-    location
-    bio
-  }
-}
-`;
-
+import {QUERY} from '../QueryGithub.js';
 
 
 function Home() {
