@@ -49,7 +49,7 @@ export default function DivTotalActivity() {
     if (error) return <p>error</p>;
     const GetNodes = data.user.repositories.nodes;
     const nbRepo = GetNodes.length;
-    var NbTotalCommit = 0
+    var NbTotalCommit = 0;
     GetNodes.map((item, i) => {   
       NbTotalCommit=NbTotalCommit+item.defaultBranchRef.target.history.totalCount;
     }

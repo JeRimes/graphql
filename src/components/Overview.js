@@ -9,7 +9,7 @@ import { Bar, Doughnut  } from 'react-chartjs-2';
 extraire les languages
 */
 const QUERY = gql`{
-  viewer {
+  user(login: "JeRimes") {
     login
     repositories(first: 10) {
 
@@ -53,41 +53,12 @@ const QUERY = gql`{
 }`;
 
 
-export function Overview() {
-  //Query to get language used in repo
-  const { loading, error, data } = useQuery(QUERY);
-
-  if (loading) return <p>loading</p>;
-  if (error) return <p>error</p>;
-
-    //path to language
-    const GetNodes = data.viewer.repositories.nodes;
-
-    //list with attributes : name of languge, color, occurence 
-    var ListAttributes= getListAllAttributesLanguage(GetNodes);
-
-    //distinct and unique name with all altributes : color and counter
-    const unique = [...new Map(ListAttributes.map(item => [item["name"], item])).values()]
-
-    //sort list
-    unique.sort((a, b) => (a.counter > b.counter) ? 1 : -1);
-
-var infoGraph = GetInfoGraph(unique);
-  return (
-    <div>
-      <h1>Overview</h1>
-      <Bar data={infoGraph}/>
-    </div>
-  )
-}
-
 export function Repository() {
     //Query to get language used in repo
     const { loading, error, data } = useQuery(QUERY);
     if (loading) return <p>loading</p>;
     if (error) return <p>error</p>;
-    const GetNodes = data.viewer.repositories.nodes;
-
+    const GetNodes = data.user.repositories.nodes;
     var ListRepo =[];
     GetNodes.map((item, i) => {   
       var ListAttributes =[];
@@ -123,10 +94,10 @@ export function Repository() {
                         <div className="repo-firstLine">
                             <p>{i}</p>
                             <div className="repo-info">
-                              {/* <img src="">github</img> */}
+                          
                               <p>{repo.nameRepo}</p>
                               <p>{repo.repoDesc}</p>
-                              {/* <img>github</img> */}
+                        
                               <p>{repo.itemWithOwner}</p>
 
                               <div className="repo-language-container">
@@ -134,15 +105,15 @@ export function Repository() {
                                   repo.ListAttr.map((language, i) => (
                                     <div className="repo-language-card bg-grey">
                                         <p>{language.name}</p>
-                                        {/* <div className="circle"></div> */}
+                                     
                                     </div>
                                           
                                   ))
                                   }
                                   </div>
                                   <div>
-                                    {/* <img src="">logo user</img> */}
-                                    <p>{data.viewer.login}</p>
+                              
+                                    <p>{data.user.login}</p>
                                   </div>
                             </div>
                             <p>{repo.nbCommit}</p>
@@ -163,19 +134,20 @@ export function Repository() {
 }
 
 export function Language() {
+  console.log("test");
   //Query to get language used in repo
   const { loading, error, data } = useQuery(QUERY);
   if (loading) return <p>loading</p>;
   if (error) return <p>error</p>;
     //path to language
-    const GetNodes = data.viewer.repositories.nodes;
+    const GetNodes = data.user.repositories.nodes;
 
     //list with attributes : name of languge, color, occurence 
     var ListAttributes= getListAllAttributesLanguage(GetNodes);
 
     //distinct and unique name with all altributes : color and counter
     const unique = [...new Map(ListAttributes.map(item => [item["name"], item])).values()]
-
+  console.log(unique);
     //sort list
     unique.sort((a, b) => (a.counter > b.counter) ? 1 : -1);
 
@@ -185,21 +157,20 @@ var infoGraph = GetInfoGraphDoughnut(unique);
       <h1>Language</h1>
       <p>All language used in each repositories</p>
       <div className="LanguageBlock">
-        <div class="content-language">
+        <div className="content-language">
             {
-              unique.map((paragraph, i) => (
+              unique.map((language, i) => (
               <div className="card-language">
                       <div className="bg-soft-grey">
-                        <h2>{paragraph.name}</h2>
+                        <h2>{language.name}</h2>
                       </div>
                       {/* <div className="bg-grey">
                       <p>Commits:</p>
                       <p>2</p>
-                      </div>
+                      </div>*/}
                       <div className="bg-soft-grey">
-                        <p>Loc</p>
-                        <p>2</p>
-                      </div> */}
+                        <p>Appear in {language.counter} repo</p>
+                      </div> 
               </div>
                ))
               }
@@ -225,38 +196,14 @@ function GetInfoGraphDoughnut(array){
     {
       label: "All language use",
       data: array.map(a => a.counter),
-      // data:[12, 19, 3, 5, 2, 3],
       backgroundColor: array.map(a => a.color),
-      // stack: "Stack 1",
       borderWidth: 1,
     }
   )
   return infoGraph;
 }
 
-
-//return list attributes for graph
-function GetInfoGraph(array){
-  var infoGraph ={
-    labels: [],
-    datasets: []
-  };
-  
-  array.map((x,i)=>{
-    infoGraph.labels.push(x.name);
-  });
-  
-  infoGraph.datasets.push(
-    {
-      label:"All language use",
-      data: array.map(a => a.counter),
-      backgroundColor: array.map(a => a.color),
-      borderColor: array.map(a => a.color),
-    }
-  )
-  return infoGraph;
-}
-
+//Stock some data in array
 function getListAllAttributesLanguage(GetNodes){
   var ListAttributes =[];
   GetNodes.map((item, i) => {   
