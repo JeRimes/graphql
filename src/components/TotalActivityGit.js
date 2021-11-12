@@ -1,10 +1,9 @@
 import React from 'react';
 import {
-    useQuery,
-    gql
+    useQuery
 } from "@apollo/client";
-import {LOC} from '../components/LOCperLanguage'
-import {QUERY} from '../QueryGithub.js';
+import { LOC } from '../components/LOCperLanguage'
+import { QUERY } from '../data/QueryGithub.js';
 
 export default function DivTotalActivity() {
 
@@ -14,8 +13,9 @@ export default function DivTotalActivity() {
     const GetNodes = data.user.repositories.nodes;
     const nbRepo = GetNodes.length;
     var NbTotalCommit = 0;
-    GetNodes.map((item, i) => {   
-      NbTotalCommit=NbTotalCommit+item.defaultBranchRef.target.history.totalCount;
+    GetNodes.map((item, i) => {
+        NbTotalCommit = NbTotalCommit + item.defaultBranchRef.target.history.totalCount;
+        return item;
     }
     );
     return (

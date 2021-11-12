@@ -13,7 +13,7 @@ import {
 const httpLink = createHttpLink({
   uri: "https://api.github.com/graphql",
   headers: {
-    authorization: `Bearer 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`
+    authorization: `Bearer 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`
   }
 });
 

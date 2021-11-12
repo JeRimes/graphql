@@ -1,12 +1,11 @@
 import React from 'react';
 import {
-  useQuery,
-  gql
+  useQuery
 } from "@apollo/client";
 import DivTotalActivity from '../components/TotalActivityGit'
-import {Language, Repository} from '../components/Repository';
-import {DivLOCperLanguage} from '../components/LOCperLanguage';
-import {QUERY} from '../QueryGithub.js';
+import { Language, Repository } from '../components/Repository';
+import { DivLOCperLanguage } from '../components/LOCperLanguage';
+import { QUERY } from '../data/QueryGithub.js';
 
 
 function Home() {
@@ -15,20 +14,20 @@ function Home() {
     <div className="content">
       <Header />
       <DivTotalActivity />
-      <DivLOCperLanguage/>
-      <Language/>
-      <Repository/>
+      <DivLOCperLanguage />
+      <Language />
+      <Repository />
     </div>
 
   )
 }
 
-function Header(){
+function Header() {
   const { loading, error, data } = useQuery(QUERY);
 
   if (loading) return <p>loading</p>;
   if (error) return <p>error</p>;
-  return(
+  return (
     <div>
       <h1>{data.user.login}</h1>
       <p>{data.user.bio}</p>
