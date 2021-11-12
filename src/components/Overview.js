@@ -56,6 +56,7 @@ const QUERY = gql`{
 export function Overview() {
   //Query to get language used in repo
   const { loading, error, data } = useQuery(QUERY);
+
   if (loading) return <p>loading</p>;
   if (error) return <p>error</p>;
 
@@ -79,6 +80,7 @@ var infoGraph = GetInfoGraph(unique);
     </div>
   )
 }
+
 export function Repository() {
     //Query to get language used in repo
     const { loading, error, data } = useQuery(QUERY);
@@ -89,7 +91,6 @@ export function Repository() {
     var ListRepo =[];
     GetNodes.map((item, i) => {   
       var ListAttributes =[];
-      console.log(item);
       const GetLanguage = item.languages.nodes;
       if(GetLanguage.length === 0){
           var myobj ={name : "Unatributes", color : "grey", counter: 0, itemWithOwner: item.nameWithOwner};
@@ -103,10 +104,10 @@ export function Repository() {
       ListRepo.push({ListAttr:ListAttributes, nameRepo:item.name, repoDesc:item.description, itemWithOwner:item.nameWithOwner, team : item.collaborators.totalCount, nbCommit: item.defaultBranchRef.target.history.totalCount});
     }
   );
-  console.log(ListRepo);
   return (
     <div>
     <h1>Repository</h1>
+    <p>{ListRepo.length} repos</p>
     <div className="repo-header bg-grey">
       <h3>#</h3>
       <h3>Repository</h3>
@@ -133,7 +134,7 @@ export function Repository() {
                                   repo.ListAttr.map((language, i) => (
                                     <div className="repo-language-card bg-grey">
                                         <p>{language.name}</p>
-                                        <div className="circle"></div>
+                                        {/* <div className="circle"></div> */}
                                     </div>
                                           
                                   ))
@@ -146,11 +147,9 @@ export function Repository() {
                             </div>
                             <p>{repo.nbCommit}</p>
                             <p>{repo.team}</p>
-                            <p>c#</p>
+                            <p>{repo.ListAttr.find(x=>x!==undefined).name}</p>
                         </div>
-                    
-              
-                  
+                          
                       </div>
               </div>
                ))
@@ -184,6 +183,7 @@ var infoGraph = GetInfoGraphDoughnut(unique);
   return (
     <div>
       <h1>Language</h1>
+      <p>All language used in each repositories</p>
       <div className="LanguageBlock">
         <div class="content-language">
             {
@@ -192,14 +192,14 @@ var infoGraph = GetInfoGraphDoughnut(unique);
                       <div className="bg-soft-grey">
                         <h2>{paragraph.name}</h2>
                       </div>
-                      <div className="bg-grey">
+                      {/* <div className="bg-grey">
                       <p>Commits:</p>
                       <p>2</p>
                       </div>
-                    <div className="bg-soft-grey">
+                      <div className="bg-soft-grey">
                         <p>Loc</p>
                         <p>2</p>
-                    </div>
+                      </div> */}
               </div>
                ))
               }

@@ -3,6 +3,7 @@ import {
     useQuery,
     gql
 } from "@apollo/client";
+import {LOC} from '../components/LOCperLanguage'
 
 const QUERY = gql`
 query{
@@ -10,24 +11,49 @@ query{
     login
     avatarUrl
     bio
+    name
     following {
       totalCount
     }
-    name
+    followers {
+        totalCount
+    }
     commitComments {
       totalCount
     }
-    repositories {
-      totalCount
-    }
+    repositories(first: 10) {
+        nodes {
+          defaultBranchRef {
+            target {
+              ... on Commit {
+                id
+                history(first: 10) {
+                  totalCount
+                }
+              }
+            }
+          }
+        }
+      }
+
   }
 }
 `;
 
+
+
 export default function DivTotalActivity() {
+
     const { loading, error, data } = useQuery(QUERY);
     if (loading) return <p>loading</p>;
     if (error) return <p>error</p>;
+    const GetNodes = data.user.repositories.nodes;
+    const nbRepo = GetNodes.length;
+    var NbTotalCommit = 0
+    GetNodes.map((item, i) => {   
+      NbTotalCommit=NbTotalCommit+item.defaultBranchRef.target.history.totalCount;
+    }
+    );
     return (
         <div>
             <p>{data.user.login}</p>
@@ -36,19 +62,19 @@ export default function DivTotalActivity() {
                 <img src={data.user.avatarUrl} alt="img-user-git" />
                 <div className="grey">
                     <p>Commits</p>
-                    <p>{data.user.commitComments.totalCount}</p>
+                    <p>{NbTotalCommit}</p>
                 </div>
                 <div className="grey">
                     <p>Repos</p>
-                    <p>0</p>
+                    <p>{nbRepo}</p>
                 </div>
                 <div className="grey">
                     <p>Lines of code</p>
-                    <p>0</p>
+                    <p>{LOC}</p>
                 </div>
                 <div className="green-light">
                     <p>Followers</p>
-                    <p>{data.user.following.totalCount}</p>
+                    <p>{data.user.followers.totalCount}</p>
                 </div>
                 <div className="green-light">
                     <p>Following</p>
